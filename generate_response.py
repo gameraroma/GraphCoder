@@ -99,20 +99,14 @@ def main(args, input_cases, responses_save_name):
                 response_lines = response.splitlines(keepends=True)
                 response = "".join(response_lines[n_prompt_lines:])
             else:
-                completion = client.chat.completions.create(
-                    model="local-model",
-                    messages=[
-                        {
-                            "role": "user",
-                            "content": [
-                                {"type": "text", "text": prompt},
-                            ],
-                        }
-                    ],
+                completion = client.completions.create(
+                    model="Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF/qwen2.5-coder-1.5b-instruct-q8_0.gguf",
+                    stream=False,
+                    prompt=prompt,
                     max_tokens=args.max_new_tokens,
                     temperature=0.1
                 )
-                response = completion.choices[0].message.content
+                response = completion.choices[0].text
             case_res = copy.deepcopy(case)
             case_res['generate_response'] = response
             responses.append(case_res)
