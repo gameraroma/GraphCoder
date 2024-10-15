@@ -40,54 +40,58 @@ class CONSTANTS:
     query_graph_save_dir = "./graph_based_query"
     dataset_dir = "./RepoEval-Updated"
     repos = ["devchat",
-             "nemo_aligner",
-             "awslabs_fortuna",
-             "task_weaver",
-             "huggingface_diffusers",
-             "opendilab_ACE",
-             "metagpt",
-             "apple_axlearn",
-             "QingruZhang_AdaLoRA",
-             "nerfstudio-project_nerfstudio",
-             "itlemon_chatgpt4j",
-             "Aelysium-Group_rusty-connector",
-             "neoforged_NeoGradle",
-             "mybatis-flex_mybatis-flex",
-             "Guiqu1aixi_rocketmq",
-             "SimonHalvdansson_Harmonic-HN",
-             "Open-DBT_open-dbt",
-             "QuasiStellar_custom-pixel-dungeon",
-             "gentics_cms-oss",
-             "FloatingPoint-MC_MIN"
+             # "nemo_aligner",
+             # "awslabs_fortuna",
+             # "task_weaver",
+             # "huggingface_diffusers",
+             # "opendilab_ACE",
+             # "metagpt",
+             # "apple_axlearn",
+             # "QingruZhang_AdaLoRA",
+             # "nerfstudio-project_nerfstudio",
+             # "itlemon_chatgpt4j",
+             # "Aelysium-Group_rusty-connector",
+             # "neoforged_NeoGradle",
+             # "mybatis-flex_mybatis-flex",
+             # "Guiqu1aixi_rocketmq",
+             # "SimonHalvdansson_Harmonic-HN",
+             # "Open-DBT_open-dbt",
+             # "QuasiStellar_custom-pixel-dungeon",
+             # "gentics_cms-oss",
+             # "FloatingPoint-MC_MIN"
              ]
 
     repos_language = {
          "devchat": "python",
-         "nemo_aligner": "python",
-         "awslabs_fortuna": "python",
-         "task_weaver": "python",
-         "huggingface_diffusers": "python",
-         "opendilab_ACE": "python",
-         "metagpt": "python",
-         "apple_axlearn": "python",
-         "QingruZhang_AdaLoRA": "python",
-         "nerfstudio-project_nerfstudio": "python",
-         "itlemon_chatgpt4j": "java",
-         "Aelysium-Group_rusty-connector": "java",
-         "neoforged_NeoGradle": "java",
-         "mybatis-flex_mybatis-flex": "java",
-         "Guiqu1aixi_rocketmq": "java",
-         "SimonHalvdansson_Harmonic-HN": "java",
-         "Open-DBT_open-dbt": "java",
-         "QuasiStellar_custom-pixel-dungeon": "java",
-         "gentics_cms-oss": "java",
-         "FloatingPoint-MC_MIN": "java"
+         # "nemo_aligner": "python",
+         # "awslabs_fortuna": "python",
+         # "task_weaver": "python",
+         # "huggingface_diffusers": "python",
+         # "opendilab_ACE": "python",
+         # "metagpt": "python",
+         # "apple_axlearn": "python",
+         # "QingruZhang_AdaLoRA": "python",
+         # "nerfstudio-project_nerfstudio": "python",
+         # "itlemon_chatgpt4j": "java",
+         # "Aelysium-Group_rusty-connector": "java",
+         # "neoforged_NeoGradle": "java",
+         # "mybatis-flex_mybatis-flex": "java",
+         # "Guiqu1aixi_rocketmq": "java",
+         # "SimonHalvdansson_Harmonic-HN": "java",
+         # "Open-DBT_open-dbt": "java",
+         # "QuasiStellar_custom-pixel-dungeon": "java",
+         # "gentics_cms-oss": "java",
+         # "FloatingPoint-MC_MIN": "java"
     }
 
 
 class CodexTokenizer:
     def __init__(self):
-        self.tokenizer = tiktoken.encoding_for_model("gpt-3.5-turbo-instruct")
+        os.environ["TIKTOKEN_CACHE_DIR"] = "/Users/chakpiwat.p/Downloads/tiktoken_cache"
+        assert os.path.exists(
+            os.path.join("/Users/chakpiwat.p/Downloads/tiktoken_cache", "9b5ad71b2ce5302211f9c61530b329a4922fc6a4"))
+
+        self.tokenizer = tiktoken.get_encoding("cl100k_base")
         # self.tokenizer = tiktoken.get_encoding("p50k_base")
 
     def tokenize(self, text):

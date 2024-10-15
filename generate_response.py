@@ -1,4 +1,6 @@
 import argparse
+
+from openai import OpenAI
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 from tqdm import tqdm
 import openai
@@ -53,6 +55,10 @@ def main(args, input_cases, responses_save_name):
             temperature=0,
             pad_token_id=tokenizer_raw.pad_token_id,
         )
+    else:
+        client = OpenAI(base_url='http://localhost:1234/v1', api_key="not-needed")
+        tokenizer = CodexTokenizer()
+        max_num_tokens = 2048
     print('Model loading finished')
 
     # generate response and save
@@ -92,6 +98,21 @@ def main(args, input_cases, responses_save_name):
                 n_prompt_lines = len(prompt_lines)
                 response_lines = response.splitlines(keepends=True)
                 response = "".join(response_lines[n_prompt_lines:])
+            else:
+                completion = client.chat.completions.create(
+                    model="local-model",
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": prompt},
+                            ],
+                        }
+                    ],
+                    max_tokens=args.max_new_tokens,
+                    temperature=0.1
+                )
+                response = completion.choices[0].message.content
             case_res = copy.deepcopy(case)
             case_res['generate_response'] = response
             responses.append(case_res)
@@ -104,7 +125,7 @@ if __name__ == "__main__":
     args = parser_args()
 
     # load input
-    input_cases = load_jsonl(f"./search_res/{args.input_file_name}.search_res.jsonl")
+    input_cases = load_jsonl(f"./search_results/{args.input_file_name}.search_res.jsonl")
     print('Input loading finished')
 
     responses_save_name = f"./generation_results/{args.model}/{args.input_file_name}.{args.mode}.{args.model}.gen_res.jsonl"
